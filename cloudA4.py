@@ -3,6 +3,7 @@ from forms import MyForm
 from flask import request
 import cmath
 import socket
+import sys
 
 app = Flask(__name__)
 app.debug = True
@@ -44,4 +45,5 @@ def get_ip_address():
     return ip
 
 if __name__ == '__main__':
-    app.run(debug=True)
+	arg = sys.argv
+    app.run(host=arg[1])
