@@ -1,0 +1,73 @@
+<html>
+  <head>
+      <title>{{ title }} - microblog</title>
+      <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+      <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+        <nav class="navbar navbar-inverse">
+          <div class="container-fluid">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="#">Quadratic Equation Solver</a>
+            </div>
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="#">Home</a></li>
+            </ul>
+          </div>
+        </nav>
+        <div class="container">
+            <div class="row">
+                <div class="col col-lg-6 col-md-6 col-sm-6">
+                    <div class="panel panel-primary">
+                      <div class="panel-heading">Enter values for <b><i>ax^2 + bx + c</i></b></div>
+                      <div class="panel-body">
+                          <div id="error" style="color: red;"></div>
+                          <form id="eq_form" method="POST">
+                            {{ form.a(class="form-control", placeholder="a", type="number") }}<br/>
+                            {{ form.b(class="form-control", placeholder="b", type="number") }}<br/>
+                            {{ form.c(class="form-control", placeholder="c", type="number")}}<br/>
+                            <button type="button" onclick="solve_equation()" class="btn btn-primary">Get Result</button>
+                        </form>
+                      </div>
+                    </div>
+                </div>
+                <div class="col col-lg-6 col-md-6 col-sm-6" id="result-div">
+
+                </div>
+            </div>
+        </div>
+  <script>
+      function solve_equation(){
+         var a = $('#a').val();
+         var b = $('#b').val();
+         var c = $('#c').val();
+         if (a == ''){
+              $('#a').css('border', '1px solid red');
+              $('#error').append('Field is required');
+              return false;
+          }
+         else if(a == '0'){
+             $('#a').css('border', '1px solid red');
+              $('#error').append('a cannot be zero');
+              return false;
+         }
+         else{
+             $.ajax({
+               url: '/get_equation_solution',
+               type: 'GET',
+               data: {'a': a, 'b': b, 'c': c}
+             })
+              .done(function(response) {
+                $('#result-div').empty().append(response);
+              })
+              .fail(function() {
+                console.log( "error" );
+              });
+          }
+      }
+
+
+  </script>
+  </body>
+</html>
